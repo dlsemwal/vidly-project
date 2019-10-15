@@ -2,7 +2,6 @@ const express = require("express");
 const { Rental, validate } = require("../models/rental");
 const { Customer } = require("../models/customer");
 const { Movie } = require("../models/movie");
-const { Rental } = require("../models/rental");
 const mongoose = require("mongoose");
 const Fawn = require("fawn");
 
@@ -57,3 +56,5 @@ router.post("/", async (req, res) => {
     res.status(500).send("something went wrong!!!");
   }
 });
+
+module.exports = router;
