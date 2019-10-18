@@ -20,8 +20,8 @@ function sendMail(address, htmlMessage) {
   var transporter = nodemailer.createTransport("SMTP", {
     service: "Gmail",
     auth: {
-      user: "dlsemwal@gmail.com",
-      pass: "ad8909216657"
+      user: "demo@gmail.com",
+      pass: "password"
     }
   });
   var message = {
