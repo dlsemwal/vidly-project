@@ -1,3 +1,9 @@
+const EventEmitter = require("events");
+const emitter = new EventEmitter();
+
+const multer = require("multer");
+const upload = multer({ dest: "uplaods/" });
+
 const express = require("express");
 const { Genre, validate } = require("../models/genre");
 const auth = require("../middleware/auth");
@@ -12,6 +18,10 @@ router.get(
     // throw new Error("couldn't get genres.....");
     const genres = await Genre.find().sort("name");
     res.send(genres);
+    emitter.emit("genre", {
+      method: "GET",
+      message: "Genre event has been raised by someone"
+    });
   })
 );
 
@@ -23,15 +33,15 @@ router.get("/:id", async (req, res) => {
   res.send(genre);
 });
 
-router.post("/", auth, async (req, res) => {
+router.post("/", auth, upload.single("image"), async (req, res) => {
   const { error } = validate(req.body);
 
   if (error) return res.status(400).send(error.details[0].message);
 
   let genre = new Genre({ name: req.body.name });
-  genre = await genre.save();
+  await genre.save();
 
-  res.send(genre);
+  res.send({ genre: genre, file: req.file.originalname });
 });
 
 router.put("/:id", async (req, res) => {
@@ -56,6 +66,10 @@ router.delete("/:id", [auth, admin], async (req, res) => {
   if (!genre) return res.status(404).send("The genre was not found!!!");
 
   res.send(genre);
+});
+
+emitter.on("genre", data => {
+  console.log(data);
 });
 
 module.exports = router;
