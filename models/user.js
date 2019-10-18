@@ -17,12 +17,15 @@ const userSchema = new mongoose.Schema({
     maxlength: 255,
     unique: true
   },
+  isVerified: { type: Boolean, default: false },
   password: {
     type: String,
     required: true,
     minlength: 5,
     maxlength: 1024
   },
+  passwordResetToken: String,
+  passwordResetExpires: Date,
   isAdmin: Boolean
 });
 

@@ -4,6 +4,8 @@ const _ = require("lodash");
 const bcrypt = require("bcrypt");
 const router = express.Router();
 const auth = require("../middleware/auth");
+const VerificationToken = require("../models/verification");
+const nodemailer = require("nodemailer");
 
 router.get("/me", auth, async (req, res) => {
   const user = await User.findById(req.user._id).select("-password -__v");
@@ -22,6 +24,19 @@ router.post("/", async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
   await user.save();
+
+  const verificationToken = new VerificationToken({
+    _userId: user._id,
+    token: crypto.getRandomValues([16]).toString("hex")
+  });
+
+  try {
+    await verificationToken.save(err => {
+      if (err) return console.log("verification token saving  failed");
+      console.log("saved");
+    });
+    var transporter = nodemailer.createTransport;
+  } catch (ex) {}
 
   const token = user.generateAuthToken();
 
@@ -53,5 +68,11 @@ router.post("/", async (req, res) => {
 
 //   res.send(genre);
 // });
+
+router.post("/confirmation", auth, async (req, res) => {
+  const user = await User.findById(req.user._id).select("-password -__v");
+
+  res.send(user);
+});
 
 module.exports = router;
