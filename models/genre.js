@@ -8,6 +8,11 @@ const genreSchema = new mongoose.Schema({
     minlength: 5,
     maxlength: 50,
     trim: true
+  },
+  img: {
+    type: String,
+    minlength: 5,
+    trim: true
   }
 });
 
@@ -17,7 +22,8 @@ function validateGenre(genre) {
   const schema = {
     name: Joi.string()
       .required()
-      .min(3)
+      .min(5),
+    img: Joi.string().min(5)
   };
   return Joi.validate(genre, schema);
 }

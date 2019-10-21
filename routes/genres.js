@@ -1,8 +1,7 @@
 const EventEmitter = require("events");
 const emitter = new EventEmitter();
 
-const multer = require("multer");
-const upload = multer({ dest: "uplaods/" });
+const { upload } = require("../middleware/upload");
 
 const express = require("express");
 const { Genre, validate } = require("../models/genre");
@@ -34,14 +33,16 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", auth, upload.single("image"), async (req, res) => {
+  console.log(req.file);
+
   const { error } = validate(req.body);
 
   if (error) return res.status(400).send(error.details[0].message);
 
-  let genre = new Genre({ name: req.body.name });
+  let genre = new Genre({ name: req.body.name, img: req.file.filename });
   await genre.save();
 
-  res.send({ genre: genre, file: req.file.originalname });
+  res.send(genre);
 });
 
 router.put("/:id", async (req, res) => {

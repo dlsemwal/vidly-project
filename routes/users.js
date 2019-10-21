@@ -5,7 +5,6 @@ const bcrypt = require("bcrypt");
 const router = express.Router();
 const auth = require("../middleware/auth");
 const VerificationToken = require("../models/verification");
-const nodemailer = require("nodemailer");
 
 router.get("/me", auth, async (req, res) => {
   const user = await User.findById(req.user._id).select("-password -__v");
@@ -25,24 +24,28 @@ router.post("/", async (req, res) => {
   user.password = await bcrypt.hash(user.password, salt);
   await user.save();
 
+  const code = getRandomCode(6);
   const verificationToken = new VerificationToken({
     _userId: user._id,
-    token: crypto.getRandomValues([16]).toString("hex")
+    token: code
   });
 
   try {
     await verificationToken.save(err => {
       if (err) return console.log("verification token saving  failed");
       console.log("saved");
+      user.sendVerificationMail(code);
     });
-    var transporter = nodemailer.createTransport;
-  } catch (ex) {}
+  } catch (ex) {
+    console.log("verification code could not be sent.");
+  }
 
   const token = user.generateAuthToken();
 
-  res
-    .header("x-auth-token", token)
-    .send(_.pick(user, ["_id", "name", "email"]));
+  res.header("x-auth-token", token).send({
+    user: _.pick(user, ["_id", "name", "email"]),
+    message: "Confirmation mail has been sent"
+  });
 });
 
 // router.put("/:id", async (req, res) => {
@@ -70,9 +73,31 @@ router.post("/", async (req, res) => {
 // });
 
 router.post("/confirmation", auth, async (req, res) => {
-  const user = await User.findById(req.user._id).select("-password -__v");
+  const verificationToken = await VerificationToken.findOne({
+    _userId: req.user._id,
+    token: req.body.token
+  });
+
+  if (!verificationToken)
+    return res.status(400).send("This confirmation code  is not valid.");
+
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: {
+        isVerified: true
+      }
+    },
+    { new: true }
+  ).select("-password -__v");
 
   res.send(user);
 });
+
+function getRandomCode(n) {
+  let code = Math.random();
+  code = code < 0.1 ? 1 - code : code;
+  return Math.round(code * 10 ** n);
+}
 
 module.exports = router;
