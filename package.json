@@ -4,7 +4,7 @@
   "description": "backend application on node js",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -35,5 +35,8 @@
     "nodemailer": "^6.3.1",
     "winston": "^3.2.1",
     "winston-mongodb": "^5.0.0"
+  },
+  "devDependencies": {
+    "jest": "^24.9.0"
   }
 }
