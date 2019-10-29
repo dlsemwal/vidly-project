@@ -4,7 +4,10 @@
   "description": "backend application on node js",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest --watchAll --verbose"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "repository": {
     "type": "git",
@@ -37,6 +40,7 @@
     "winston-mongodb": "^5.0.0"
   },
   "devDependencies": {
-    "jest": "^24.9.0"
+    "jest": "^24.9.0",
+    "supertest": "^4.0.2"
   }
 }

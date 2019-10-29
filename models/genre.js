@@ -22,7 +22,8 @@ function validateGenre(genre) {
   const schema = {
     name: Joi.string()
       .required()
-      .min(5),
+      .min(5)
+      .max(50),
     img: Joi.string().min(5)
   };
   return Joi.validate(genre, schema);
