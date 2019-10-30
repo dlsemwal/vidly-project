@@ -1,7 +1,7 @@
 const EventEmitter = require("events");
 const emitter = new EventEmitter();
 
-// const { upload } = require("../middleware/upload");
+const { upload } = require("../middleware/upload");
 const validateObjectId = require("../middleware/validateObjectId");
 
 const express = require("express");
@@ -33,10 +33,11 @@ router.get("/:id", validateObjectId, async (req, res) => {
   res.send(genre);
 });
 
-router.post("/", auth /*, upload.single("image")*/, async (req, res) => {
+router.post("/", auth , upload.single("image"), async (req, res) => {
   const { error } = validate(req.body);
 
   if (error) return res.status(400).send(error.details[0].message);
+  
 
   let genre = new Genre({ name: req.body.name /*, img: req.file.filename*/ });
   await genre.save();
