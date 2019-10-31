@@ -56,6 +56,10 @@ describe("/api/genres", () => {
   });
 
   describe("POST /", () => {
+    const user = {
+      email: "divyanshu.semwal@neosofttech.com",
+      password: "123456"
+    };
     let token;
     let name;
     const exec = () => {
@@ -66,7 +70,7 @@ describe("/api/genres", () => {
     };
 
     beforeEach(() => {
-      token = new User().generateAuthToken();
+      token = new User(user).generateAuthToken();
       name = "genre1";
     });
 
