@@ -4,7 +4,11 @@
   "description": "backend application on node js",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll --verbose --coverage"
+    "test": "jest --watchAll --verbose --coverage",
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": "10.16.0"
   },
   "jest": {
     "testEnvironment": "node"
