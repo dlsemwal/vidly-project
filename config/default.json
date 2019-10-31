@@ -1,5 +1,5 @@
 {
   "name": "vidly-app",
   "jwtPrivateKey": "",
-  "db": "mongodb://localhost/vidly"
+  "db": "mongodb+srv://vidlyuser:user_password@cluster0-hdmle.mongodb.net/test?retryWrites=true&w=majority"
 }
