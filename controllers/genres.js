@@ -41,6 +41,8 @@ controller.update = async (req, res) => {
     { new: true }
   );
 
+  if (!genre) return res.status(404).send("The genre was not found!!!");
+
   res.send(genre);
 };
 

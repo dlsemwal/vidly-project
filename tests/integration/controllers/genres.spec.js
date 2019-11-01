@@ -5,11 +5,11 @@ const mongoose = require("mongoose");
 let server;
 
 describe("/api/genres", () => {
-  beforeEach(() => {
+  beforeAll(() => {
     server = require("../../../index");
   });
 
-  afterEach(async () => {
+  afterAll(async () => {
     server.close();
     await Genre.deleteMany();
   });
