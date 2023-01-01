@@ -26,7 +26,7 @@
   "homepage": "https://github.com/dlsemwal/vidly-project#readme",
   "dependencies": {
     "bcrypt": "^3.0.6",
-    "config": "^3.2.2",
+    "config": "^3.3.8",
     "cors": "^2.8.5",
     "debug": "^4.1.1",
     "express": "^4.17.1",
